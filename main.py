@@ -4,17 +4,17 @@
 # 3. Update the SMTP ADDRESS to match your email provider.
 # 4. Update birthdays.csv to contain today's month and day.
 # See the solution video in the 100 Days of Python Course for explainations.
-
-# import os and use it to get the Github repository secrets
-MY_EMAIL = os.environ.get("MAIL")
-MY_PASSWORD = os.environ.get("PASS")
-
 import random
 import pandas
 import datetime as dt
 import smtplib
 from email.message import EmailMessage
 import os
+
+# import os and use it to get the Github repository secrets
+MY_EMAIL = os.environ.get("MAIL")
+MY_PASSWORD = os.environ.get("PASS")
+
 
 def generate_email(person):
     birthday_name = person["name"]
