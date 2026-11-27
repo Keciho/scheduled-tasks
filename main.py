@@ -12,8 +12,8 @@ from email.message import EmailMessage
 import os
 
 # import os and use it to get the Github repository secrets
-MY_EMAIL = os.environ.get("MAIL")
-MY_PASSWORD = os.environ.get("PASS")
+MY_EMAIL = os.environ.get("MY_EMAIL")
+MY_PASSWORD = os.environ.get("MY_PASSWORD")
 
 
 def generate_email(person):
