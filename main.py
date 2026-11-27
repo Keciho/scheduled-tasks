@@ -6,8 +6,8 @@
 # See the solution video in the 100 Days of Python Course for explainations.
 
 # import os and use it to get the Github repository secrets
-MY_EMAIL = os.environ.get("Mail")
-MY_PASSWORD = os.environ.get("Pass")
+MY_EMAIL = os.environ.get("MAIL")
+MY_PASSWORD = os.environ.get("PASS")
 
 import random
 import pandas
