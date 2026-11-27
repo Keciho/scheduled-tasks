@@ -5,34 +5,46 @@
 # 4. Update birthdays.csv to contain today's month and day.
 # See the solution video in the 100 Days of Python Course for explainations.
 
-
-from datetime import datetime
-import pandas
-import random
-import smtplib
-import os
-
 # import os and use it to get the Github repository secrets
 MY_EMAIL = os.environ.get("MY_EMAIL")
 MY_PASSWORD = os.environ.get("MY_PASSWORD")
 
-today = datetime.now()
-today_tuple = (today.month, today.day)
+import random
+import pandas
+import datetime as dt
+import smtplib
+from email.message import EmailMessage
+import os
+
+def generate_email(person):
+    birthday_name = person["name"]
+    birthday_email = person["email"]
+
+    with open(f"letter_templates/letter_{random.randint(1,3)}.txt", "r") as file:
+        letter_template = file.read()
+        birthday_letter = letter_template.replace("[NAME]", birthday_name)
+
+    with smtplib.SMTP("smtp.mail.me.com", 587) as connection:
+        connection.starttls()
+        connection.login(user=MY_EMAIL, password=PASSWORD)
+        msg = EmailMessage()
+        msg["From"] = MY_EMAIL
+        msg["To"] = birthday_email
+        msg["Subject"] = f"Happy Birthday {birthday_name}!"
+        msg.set_content(birthday_letter)
+        connection.send_message(msg)
+
+today = dt.datetime.now()
+today_month = today.month
+today_day = today.day
+today = (today_month, today_day)
 
 data = pandas.read_csv("birthdays.csv")
-birthdays_dict = {(data_row["month"], data_row["day"])                  : data_row for (index, data_row) in data.iterrows()}
-if today_tuple in birthdays_dict:
-    birthday_person = birthdays_dict[today_tuple]
-    file_path = f"letter_templates/letter_{random.randint(1, 3)}.txt"
-    with open(file_path) as letter_file:
-        contents = letter_file.read()
-        contents = contents.replace("[NAME]", birthday_person["name"])
 
-    with smtplib.SMTP("YOUR EMAIL PROVIDER SMTP SERVER ADDRESS") as connection:
-        connection.starttls()
-        connection.login(MY_EMAIL, MY_PASSWORD)
-        connection.sendmail(
-            from_addr=MY_EMAIL,
-            to_addrs=birthday_person["email"],
-            msg=f"Subject:Happy Birthday!\n\n{contents}"
-        )
+birthdays_dict = {(data_row["month"],data_row["day"]): data_row for (index, data_row) in data.iterrows()}
+
+if today in birthdays_dict:
+    birthday_person = birthdays_dict[today]
+    generate_email(birthday_person)
+
+
